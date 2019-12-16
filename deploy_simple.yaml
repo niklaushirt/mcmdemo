@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mcmhtml-simple
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mcmhtml-simple
+        version: current
+    spec:
+      containers:
+      - name: mcmhtml-simple
+        image: niklaushirt/mcmhtmldemo:mcmsimple-1.1.0
+        imagePullPolicy: Always 
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "50Mi"
+          limits:
+            cpu: "50m"
+            memory: "50Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcmhtml-simple-service
+  namespace: default
+spec:
+  selector:
+    app: mcmhtml-simple
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 31999
+  type: NodePort

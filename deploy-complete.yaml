@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mcmhtml-complete
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mcmhtml-complete
+        version: current
+    spec:
+      containers:
+      - name: mcmhtml-complete
+        image: niklaushirt/mcmhtmldemo:mcmcomplete-1.1.0
+        imagePullPolicy: Always 
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "50Mi"
+          limits:
+            cpu: "50m"
+            memory: "50Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcmhtml-complete-service
+  namespace: default
+spec:
+  selector:
+    app: mcmhtml-complete
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 31998
+  type: NodePort
